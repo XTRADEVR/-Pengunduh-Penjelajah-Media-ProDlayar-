@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#2563eb">
+  <title>Nova Video Downloader Pro</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 7. FLASHSCREEN / SPLASH SCREEN BERKUALITAS -->
+  <div id="splash-screen">
+    <div class="splash-logo-wrap">
+      <div class="splash-ring"></div>
+      <div class="splash-icon">⚡</div>
+    </div>
+    <div class="splash-title">NOVA DOWNLOADER</div>
+    <div class="splash-badge">TURBO ENGINE 100 MB/s</div>
+  </div>
+
+  <!-- BROWSER NAVIGATION BAR -->
+  <header class="browser-bar">
+    <div class="input-container">
+      <span style="margin-right: 8px;">🔒</span>
+      <input type="text" id="urlInput" placeholder="Cari atau masukkan URL video..." value="https://vimeo.com/channels/staffpicks/829182">
+      <button class="btn-icon" id="btnClear">✕</button>
+    </div>
+    <div class="browser-actions">
+      <button class="btn-icon" title="Kembali">◀</button>
+      <button class="btn-icon" title="Maju">▶</button>
+      <button class="btn-icon" title="Tab Baru">🗂️ 3</button>
+      <button class="btn-icon" title="Bookmark">★</button>
+      <button class="btn-icon" title="Salin Tautan" id="btnCopy">🔗</button>
+      <button class="btn-icon" title="Pengaturan" id="btnSettings">⚙️</button>
+    </div>
+  </header>
+
+  <!-- TURBO SPEED BANNER -->
+  <div class="turbo-banner">
+    <span>🚀 HyperSpeed Downloader: AKTIF</span>
+    <span style="color: #6ee7b7;">Maks: 100 MB/s</span>
+  </div>
+
+  <!-- MAIN APP CONTAINER -->
+  <main class="main-view" id="mainContainer">
+    <!-- Tautan Pintas Cepat -->
+    <div class="section-title">Akses Cepat Platform</div>
+    <div class="grid-links" id="quickLinksContainer"></div>
+
+    <!-- Manajemen Penyimpanan File -->
+    <div class="section-title">Lokasi Penyimpanan Unduhan</div>
+    <div class="storage-toggle">
+      <button class="storage-btn active" id="btnStorePhone">📱 Internal (52.4 GB Bebas)</button>
+      <button class="storage-btn" id="btnStoreSD">💾 SD Card (118.2 GB Bebas)</button>
+    </div>
+
+    <!-- 8. BOTTOM SHIMMER EFFECT / DAFTAR TUGAS -->
+    <div class="section-title">Unduhan Terbaru</div>
+    <div id="downloadListContainer"></div>
+    
+    <!-- Elemen Shimmer Saat Data Memuat/Memproses -->
+    <div class="shimmer-container" id="bottomShimmer">
+      <div class="shimmer-card"><div class="shimmer-anim"></div></div>
+      <div class="shimmer-card"><div class="shimmer-anim"></div></div>
+    </div>
+  </main>
+
+  <!-- DETEKSI OTOMATIS SATU-KLIK (FAB) -->
+  <div class="detect-fab" id="fabDetect">
+    <span>⚡</span> Unduh Video (1080P Ditemukan)
+  </div>
+
+  <!-- MODAL PILIHAN KUALITAS & RESOLUSI VIDEO -->
+  <div class="modal-overlay" id="qualityModal">
+    <div class="modal-sheet">
+      <h3 style="margin-bottom: 6px;">Pilih Kualitas Video</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;" id="modalVideoTitle">Cinematic_Nature_Scene.mp4</p>
+      
+      <div class="quality-option" data-res="1080P" data-size="142.5 MB">
+        <div>
+          <strong>1080P (FHD)</strong>
+          <div style="font-size: 12px; color: var(--accent-emerald);">Kecepatan Optimal • Ultra HD</div>
+        </div>
+        <span style="font-weight: 600;">142.5 MB</span>
+      </div>
+
+      <div class="quality-option" data-res="720P" data-size="64.8 MB">
+        <div>
+          <strong>720P (HD)</strong>
+          <div style="font-size: 12px; color: var(--text-muted);">Paling Hemat Kuota</div>
+        </div>
+        <span style="font-weight: 600;">64.8 MB</span>
+      </div>
+
+      <div class="quality-option" data-res="240P" data-size="18.2 MB">
+        <div>
+          <strong>240P (Low)</strong>
+          <div style="font-size: 12px; color: var(--text-muted);">Format Ringan</div>
+        </div>
+        <span style="font-weight: 600;">18.2 MB</span>
+      </div>
+
+      <button style="width: 100%; padding: 12px; background: var(--border); color: #fff; border: none; border-radius: 8px; margin-top: 10px; cursor: pointer;" id="btnCloseModal">Tutup</button>
+    </div>
+  </div>
+
+  <!-- MODAL FOLDER PRIBADI DILINDUNGI PIN -->
+  <div class="modal-overlay" id="pinModal">
+    <div class="modal-sheet" style="text-align: center;">
+      <h3>🔒 Folder Pribadi Terkunci</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin: 8px 0 16px;">Masukkan 4 digit PIN untuk membuka file aman</p>
+      <input type="password" id="pinInput" maxlength="4" style="font-size: 24px; text-align: center; letter-spacing: 12px; width: 140px; padding: 8px; background: var(--bg-surface); border: 1px solid var(--border); color: #fff; border-radius: 8px; margin-bottom: 16px;" placeholder="••••">
+      <br>
+      <button id="btnUnlockPin" style="width: 100%; padding: 12px; background: var(--accent); color: white; border: none; border-radius: 8px; font-weight: 600;">Buka Brankas</button>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAVBAR -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" id="tabHome">
+      <span style="font-size: 18px;">🌐</span>
+      <span>Peramban</span>
+    </button>
+    <button class="nav-item" id="tabDownloads">
+      <span style="font-size: 18px;">📥</span>
+      <span>Unduhan</span>
+    </button>
+    <button class="nav-item" id="tabPrivate">
+      <span style="font-size: 18px;">🔐</span>
+      <span>Pribadi</span>
+    </button>
+  </nav>
+
+  <script src="app.js"></script>
+</body>
+      </html>
