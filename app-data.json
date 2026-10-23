@@ -1,0 +1,36 @@
+{
+  "quickLinks": [
+    { "name": "Instagram", "icon": "📸", "color": "#E1306C", "url": "https://instagram.com" },
+    { "name": "TikTok", "icon": "🎵", "color": "#00f2fe", "url": "https://tiktok.com" },
+    { "name": "Facebook", "icon": "📘", "color": "#1877F2", "url": "https://facebook.com" },
+    { "name": "Twitter/X", "icon": "🐦", "color": "#1DA1F2", "url": "https://twitter.com" },
+    { "name": "Vimeo", "icon": "🎬", "color": "#1ab7ea", "url": "https://vimeo.com" },
+    { "name": "Dailymotion", "icon": "📺", "color": "#0066dc", "url": "https://dailymotion.com" }
+  ],
+  "storage": {
+    "totalGB": 128,
+    "usedGB": 45.8,
+    "location": "phone"
+  },
+  "downloads": [
+    {
+      "id": "dl-1",
+      "title": "Cinematic_Drone_4K_Nature.mp4",
+      "quality": "1080P",
+      "size": "145 MB",
+      "progress": 100,
+      "status": "completed",
+      "isPrivate": false
+    },
+    {
+      "id": "dl-2",
+      "title": "Tutorial_Web_Performance_PWA.mp4",
+      "quality": "720P",
+      "size": "82 MB",
+      "progress": 64,
+      "speed": "84.2 MB/s",
+      "status": "active",
+      "isPrivate": false
+    }
+  ]
+}.
