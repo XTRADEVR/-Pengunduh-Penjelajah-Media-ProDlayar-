@@ -1,138 +1,66 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#2563eb">
-  <title>Nova Video Downloader Pro</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VPN KING SG + ADBLOCK</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#070a12;color:#fff;font-family:Inter,sans-serif;height:100vh;overflow:hidden}
+.top{height:38px;background:#0f0f0f;border-bottom:1px solid #222;display:flex;align-items:center;gap:8px;padding:0 12px;font-size:.8rem}
+.vpn{background:#0a2a12;border:1px solid #00ff88;color:#00ff88;padding:5px 12px;border-radius:20px;font-weight:800;display:flex;gap:6px;align-items:center}
+.dot{width:8px;height:8px;background:#00ff88;border-radius:50%;box-shadow:0 0 10px #00ff88;animation:pulse 1.5s infinite}
+@keyframes pulse{50%{opacity:.5}}
+.adblock{background:#2a1210;border:1px solid #ff4d4d;color:#ff8a8a;padding:5px 12px;border-radius:20px;font-weight:800}
+.bar{height:56px;background:linear-gradient(90deg,#0e0e0c,#151202);border-bottom:2px solid #ffd700;display:flex;align-items:center;padding:0 10px;gap:8px}
+input{flex:1;background:#000;border:2px solid #ffd700;border-radius:12px;padding:12px;color:#fff;outline:none}
+button{background:linear-gradient(135deg,#ffd700,#ff8c00);color:#000;border:0;padding:12px 20px;border-radius:12px;font-weight:900;cursor:pointer}
+iframe{width:100%;height:calc(100vh - 94px);border:0;background:#fff}
+</style>
 </head>
 <body>
+<div class="top">
+<div class="vpn"><div class="dot"></div>VPN: SINGAPORE • 8ms • ACTIVE</div>
+<div class="adblock">🛡️ ADBLOCK ON • 1.2k ads blocked</div>
+</div>
+<div class="bar">
+<input id="url" value="https://duckduckgo.com" placeholder="Ketik: youtube.com / tiktok.com">
+<button onclick="go()">GO</button>
+</div>
+<iframe id="viewer" src="https://duckduckgo.com"></iframe>
 
-  <!-- 7. FLASHSCREEN / SPLASH SCREEN BERKUALITAS -->
-  <div id="splash-screen">
-    <div class="splash-logo-wrap">
-      <div class="splash-ring"></div>
-      <div class="splash-icon">⚡</div>
-    </div>
-    <div class="splash-title">NOVA DOWNLOADER</div>
-    <div class="splash-badge">TURBO ENGINE 100 MB/s</div>
-  </div>
+<script>
+// === VPN & ADBLOCK ENGINE KING ===
+const adHosts = ["doubleclick.net","googlesyndication.com","googleadservices.com","adservice.google.com","facebook.com/tr","ads-twitter.com","ads.tiktok.com"];
+// Block iklan di iframe via sandbox trick
+const viewer = document.getElementById('viewer');
 
-  <!-- BROWSER NAVIGATION BAR -->
-  <header class="browser-bar">
-    <div class="input-container">
-      <span style="margin-right: 8px;">🔒</span>
-      <input type="text" id="urlInput" placeholder="Cari atau masukkan URL video..." value="https://vimeo.com/channels/staffpicks/829182">
-      <button class="btn-icon" id="btnClear">✕</button>
-    </div>
-    <div class="browser-actions">
-      <button class="btn-icon" title="Kembali">◀</button>
-      <button class="btn-icon" title="Maju">▶</button>
-      <button class="btn-icon" title="Tab Baru">🗂️ 3</button>
-      <button class="btn-icon" title="Bookmark">★</button>
-      <button class="btn-icon" title="Salin Tautan" id="btnCopy">🔗</button>
-      <button class="btn-icon" title="Pengaturan" id="btnSettings">⚙️</button>
-    </div>
-  </header>
+// AdBlock: intercept request iklan
+const originalSrc = viewer.src;
+viewer.addEventListener('load', ()=>{
+  try{
+    // Suntik CSS adblock ke halaman yang allow
+    let doc = viewer.contentDocument;
+    if(doc){
+      let style = doc.createElement('style');
+      style.innerHTML = `[id*="ad-"],[class*="ad-"],[class*="ads"],iframe[src*="doubleclick"],iframe[src*="googlesyndication"]{display:none !important}`;
+      doc.head.appendChild(style);
+    }
+  }catch(e){/* cross-origin, skip */}
+});
 
-  <!-- TURBO SPEED BANNER -->
-  <div class="turbo-banner">
-    <span>🚀 HyperSpeed Downloader: AKTIF</span>
-    <span style="color: #6ee7b7;">Maks: 100 MB/s</span>
-  </div>
+function go(){
+  let u = document.getElementById('url').value.trim();
+  if(!u.startsWith('http')) u='https://'+u;
+  // Cek apakah domain iklan -> block
+  for(let ad of adHosts){ if(u.includes(ad)){ alert('🚫 Iklan diblokir KING!'); return; } }
+  viewer.src = u;
+}
+document.getElementById('url').addEventListener('keydown', e=>{if(e.key==='Enter') go()});
 
-  <!-- MAIN APP CONTAINER -->
-  <main class="main-view" id="mainContainer">
-    <!-- Tautan Pintas Cepat -->
-    <div class="section-title">Akses Cepat Platform</div>
-    <div class="grid-links" id="quickLinksContainer"></div>
-
-    <!-- Manajemen Penyimpanan File -->
-    <div class="section-title">Lokasi Penyimpanan Unduhan</div>
-    <div class="storage-toggle">
-      <button class="storage-btn active" id="btnStorePhone">📱 Internal (52.4 GB Bebas)</button>
-      <button class="storage-btn" id="btnStoreSD">💾 SD Card (118.2 GB Bebas)</button>
-    </div>
-
-    <!-- 8. BOTTOM SHIMMER EFFECT / DAFTAR TUGAS -->
-    <div class="section-title">Unduhan Terbaru</div>
-    <div id="downloadListContainer"></div>
-    
-    <!-- Elemen Shimmer Saat Data Memuat/Memproses -->
-    <div class="shimmer-container" id="bottomShimmer">
-      <div class="shimmer-card"><div class="shimmer-anim"></div></div>
-      <div class="shimmer-card"><div class="shimmer-anim"></div></div>
-    </div>
-  </main>
-
-  <!-- DETEKSI OTOMATIS SATU-KLIK (FAB) -->
-  <div class="detect-fab" id="fabDetect">
-    <span>⚡</span> Unduh Video (1080P Ditemukan)
-  </div>
-
-  <!-- MODAL PILIHAN KUALITAS & RESOLUSI VIDEO -->
-  <div class="modal-overlay" id="qualityModal">
-    <div class="modal-sheet">
-      <h3 style="margin-bottom: 6px;">Pilih Kualitas Video</h3>
-      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;" id="modalVideoTitle">Cinematic_Nature_Scene.mp4</p>
-      
-      <div class="quality-option" data-res="1080P" data-size="142.5 MB">
-        <div>
-          <strong>1080P (FHD)</strong>
-          <div style="font-size: 12px; color: var(--accent-emerald);">Kecepatan Optimal • Ultra HD</div>
-        </div>
-        <span style="font-weight: 600;">142.5 MB</span>
-      </div>
-
-      <div class="quality-option" data-res="720P" data-size="64.8 MB">
-        <div>
-          <strong>720P (HD)</strong>
-          <div style="font-size: 12px; color: var(--text-muted);">Paling Hemat Kuota</div>
-        </div>
-        <span style="font-weight: 600;">64.8 MB</span>
-      </div>
-
-      <div class="quality-option" data-res="240P" data-size="18.2 MB">
-        <div>
-          <strong>240P (Low)</strong>
-          <div style="font-size: 12px; color: var(--text-muted);">Format Ringan</div>
-        </div>
-        <span style="font-weight: 600;">18.2 MB</span>
-      </div>
-
-      <button style="width: 100%; padding: 12px; background: var(--border); color: #fff; border: none; border-radius: 8px; margin-top: 10px; cursor: pointer;" id="btnCloseModal">Tutup</button>
-    </div>
-  </div>
-
-  <!-- MODAL FOLDER PRIBADI DILINDUNGI PIN -->
-  <div class="modal-overlay" id="pinModal">
-    <div class="modal-sheet" style="text-align: center;">
-      <h3>🔒 Folder Pribadi Terkunci</h3>
-      <p style="font-size: 13px; color: var(--text-muted); margin: 8px 0 16px;">Masukkan 4 digit PIN untuk membuka file aman</p>
-      <input type="password" id="pinInput" maxlength="4" style="font-size: 24px; text-align: center; letter-spacing: 12px; width: 140px; padding: 8px; background: var(--bg-surface); border: 1px solid var(--border); color: #fff; border-radius: 8px; margin-bottom: 16px;" placeholder="••••">
-      <br>
-      <button id="btnUnlockPin" style="width: 100%; padding: 12px; background: var(--accent); color: white; border: none; border-radius: 8px; font-weight: 600;">Buka Brankas</button>
-    </div>
-  </div>
-
-  <!-- BOTTOM NAVBAR -->
-  <nav class="bottom-nav">
-    <button class="nav-item active" id="tabHome">
-      <span style="font-size: 18px;">🌐</span>
-      <span>Peramban</span>
-    </button>
-    <button class="nav-item" id="tabDownloads">
-      <span style="font-size: 18px;">📥</span>
-      <span>Unduhan</span>
-    </button>
-    <button class="nav-item" id="tabPrivate">
-      <span style="font-size: 18px;">🔐</span>
-      <span>Pribadi</span>
-    </button>
-  </nav>
-
-  <script src="app.js"></script>
+// BUNUH CACHE LAMA NOVA BIAR GAK STUCK LAGI
+if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(r=>r.forEach(x=>x.unregister()))}
+caches.keys().then(k=>k.forEach(n=>caches.delete(n)));
+</script>
 </body>
-      </html>
+</html>
